@@ -59,6 +59,6 @@ public class ArticleController {
         Article saved = articleRepository.save(article);
         log.info(saved.toString()); //로깅 코드 추가
         //System.out.println(saved.toString()); //article이 DB에 잘 저장되는지 확인 출력
-        return "";
+        return "redirect:/articles/" + saved.getId();
     }
 }
