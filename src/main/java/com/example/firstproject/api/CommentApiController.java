@@ -31,5 +31,14 @@ public class CommentApiController {
         return ResponseEntity.status(HttpStatus.OK).body(createdDto);
     }
     // 3. 댓글 수정
+    @PatchMapping("/api/comments/{id}") // 댓글 수정 요청 접수
+    public ResponseEntity<CommentDTO> update(@PathVariable Long id, @RequestBody CommentDTO dto){
+
+        // 서비스에 위임(댓글 컨트롤러는 댓글 서비스에 수정 작업을 위임)
+        // 수정 결과는 CommentDto 타입의 updatedDto라는 변수로 받음
+        CommentDTO updatedDto = commentService.update(id, dto);
+        // 결과 응답
+        return ResponseEntity.status(HttpStatus.OK).body(updatedDto);
+    }
     // 4. 댓글 삭제
 }
