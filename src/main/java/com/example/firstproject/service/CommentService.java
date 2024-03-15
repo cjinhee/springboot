@@ -54,4 +54,25 @@ public class CommentService {
         // 4. DTO로 변환해 반환
         return CommentDTO.createCommentDTO(created);
     }
+    @Transactional
+    public CommentDTO update(Long id, CommentDTO dto) {
+        // 1. 댓글 조회 및 예외 발생
+        // 수정할 댓글을 가져오고 없으면 에러메시지 출력
+        Comment target = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("댓글 수정 실패!" + "대상 댓글이 없습니다."));
+        // 2. 가져온 댓글 내용 수정하기
+        target.patch(dto);
+        // 3. 수정한 댓글을 DB에 갱신하기(수정 데이터로 덮어쓰기)
+        Comment updated = commentRepository.save(target);
+        // 4. DB에 반영된 엔티티를 DTO로 변환해 컨트롤러로 반환하기
+        return CommentDTO.createCommentDTO(updated);
+    }
+    @Transactional
+    public CommentDTO delete(Long id) {
+        // 1. 댓글 조회 및 예외 발생
+        Comment target = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("댓글 삭제 실패!" + "대상이 없습니다."));
+        // 2. 댓글 삭제
+        commentRepository.delete(target);
+        // 3. 삭제 댓글을 DTO로 변환 및 반환
+        return CommentDTO.createCommentDTO(target);
+    }
 }
